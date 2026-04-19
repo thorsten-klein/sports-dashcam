@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports-Dashcam</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234CAF50'%3E%3Cpath d='M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <span class="material-icons">videocam</span>
+                    Sports-Dashcam
+                </h1>
+                <div class="header-actions">
+                    <button class="icon-button" id="startRecordingBtn" title="Start Recording" disabled>
+                        <span class="material-icons">fiber_manual_record</span>
+                    </button>
+                    <button class="icon-button" id="lockScreenBtn" title="Lock Screen">
+                        <span class="material-icons">lock</span>
+                    </button>
+                    <button class="icon-button" id="fullscreenBtn" title="Toggle Fullscreen">
+                        <span class="material-icons">fullscreen</span>
+                    </button>
+                    <button class="icon-button" id="settingsBtn" title="Settings">
+                        <span class="material-icons">settings</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <main class="main-content">
+                <div class="main-header">
+                    <div class="main-tabs">
+                        <button class="main-tab active" id="camerasTab">
+                            <span class="material-icons">videocam</span>
+                            <span>Cameras</span>
+                        </button>
+                        <button class="main-tab" id="tagsTab">
+                            <span class="material-icons">local_offer</span>
+                            <span>Video Tags</span>
+                        </button>
+                        <button class="main-tab" id="fullVideosTab">
+                            <span class="material-icons">video_library</span>
+                            <span>Full Videos</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="main-content-area">
+                    <!-- Cameras Tab Content -->
+                    <div class="tab-content" id="camerasTabContent">
+                        <!-- Scrollable Cameras Content -->
+                        <div class="tags-content-scrollable">
+                            <!-- Empty State -->
+                            <div class="empty-state" id="emptyState">
+                                <span class="material-icons empty-icon">videocam_off</span>
+                                <h2>No Cameras Added</h2>
+                                <p>Add your first IP camera to start monitoring</p>
+                                <button class="btn btn-primary" id="addFirstCamera">
+                                    <span class="material-icons">add</span>
+                                    Add Camera
+                                </button>
+                            </div>
+
+                            <!-- Camera Grid -->
+                            <div class="camera-grid" id="cameraGrid">
+                                <!-- Camera cards will be inserted here dynamically -->
+                                <!-- Add Camera Card (always last) -->
+                                <div class="add-camera-card hidden" id="addCameraCard">
+                                    <span class="material-icons add-icon">add</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tags Tab Content -->
+                    <div class="tab-content hidden" id="tagsTabContent">
+                        <!-- Tag Category Filters -->
+                        <div class="tag-filters" id="tagFilters">
+                            <span class="filter-label-text">Filter:</span>
+                            <button class="tag-filter active" data-category="A">
+                                <span class="filter-indicator"></span>
+                                <span class="filter-label">A</span>
+                            </button>
+                            <button class="tag-filter active" data-category="B">
+                                <span class="filter-indicator"></span>
+                                <span class="filter-label">B</span>
+                            </button>
+                            <button class="tag-filter active" data-category="C">
+                                <span class="filter-indicator"></span>
+                                <span class="filter-label">C</span>
+                            </button>
+                            <button class="tag-filter active" data-category="D">
+                                <span class="filter-indicator"></span>
+                                <span class="filter-label">D</span>
+                            </button>
+                            <button class="tag-filter active" data-category="E">
+                                <span class="filter-indicator"></span>
+                                <span class="filter-label">E</span>
+                            </button>
+                            <button class="tag-filter active" data-category="F">
+                                <span class="filter-indicator"></span>
+                                <span class="filter-label">F</span>
+                            </button>
+                            <button class="tag-filter active" data-category="G">
+                                <span class="filter-indicator"></span>
+                                <span class="filter-label">G</span>
+                            </button>
+                            <button class="tag-filter active" data-category="H">
+                                <span class="filter-indicator"></span>
+                                <span class="filter-label">H</span>
+                            </button>
+                            <button class="tag-filter active" data-category="I">
+                                <span class="filter-indicator"></span>
+                                <span class="filter-label">I</span>
+                            </button>
+                            <button class="tag-filter active" data-category="J">
+                                <span class="filter-indicator"></span>
+                                <span class="filter-label">J</span>
+                            </button>
+                        </div>
+
+                        <!-- Scrollable Tags Content -->
+                        <div class="tags-content-scrollable">
+                            <!-- Clear All Button (hidden - using date delete instead) -->
+                            <div class="clear-all-container hidden" id="clearAllTagsContainer" style="display: none;">
+                                <button class="btn btn-secondary btn-small" id="clearAllTags">
+                                    <span class="material-icons">delete_sweep</span>
+                                    Clear all
+                                </button>
+                            </div>
+
+                            <!-- Empty State for Tags -->
+                            <div class="tags-empty" id="tagsEmpty">
+                                <span class="material-icons">bookmark_border</span>
+                                <p>No saved clips yet</p>
+                                <small>Save video clips to see them here</small>
+                            </div>
+
+                            <!-- Tags List -->
+                            <div class="tags-list" id="tagsList">
+                                <!-- Tag items will be inserted here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full Videos Tab Content -->
+                    <div class="tab-content hidden" id="fullVideosTabContent">
+                        <!-- Scrollable Full Videos Content -->
+                        <div class="tags-content-scrollable">
+                            <!-- Clear All Button (hidden - using date delete instead) -->
+                            <div class="clear-all-container hidden" id="clearAllFullVideosContainer" style="display: none;">
+                                <button class="btn btn-secondary btn-small" id="clearAllFullVideos">
+                                    <span class="material-icons">delete_sweep</span>
+                                    Clear all
+                                </button>
+                            </div>
+
+                            <!-- Empty State for Full Videos -->
+                            <div class="tags-empty" id="fullVideosEmpty">
+                                <span class="material-icons">video_library</span>
+                                <p>No full videos yet</p>
+                                <small>Start recording to capture full videos</small>
+                            </div>
+
+                            <!-- Full Videos List -->
+                            <div class="tags-list" id="fullVideosList">
+                                <!-- Full video items will be inserted here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Tag Buttons (Bottom Center) -->
+        <div class="tag-buttons-container hidden" id="tagButtonsContainer">
+            <button class="tag-button" id="tagButtonA" data-tag-label="A" title="Tag all recording cameras with A">
+                <span class="material-icons">bookmark</span>
+                <span class="tag-label">Tag A</span>
+            </button>
+            <button class="tag-button" id="tagButtonB" data-tag-label="B" title="Tag all recording cameras with B">
+                <span class="material-icons">bookmark</span>
+                <span class="tag-label">Tag B</span>
+            </button>
+            <button class="tag-button" id="tagButtonC" data-tag-label="C" title="Tag all recording cameras with C">
+                <span class="material-icons">bookmark</span>
+                <span class="tag-label">Tag C</span>
+            </button>
+            <button class="tag-button" id="tagButtonD" data-tag-label="D" title="Tag all recording cameras with D">
+                <span class="material-icons">bookmark</span>
+                <span class="tag-label">Tag D</span>
+            </button>
+            <button class="tag-button" id="tagButtonE" data-tag-label="E" title="Tag all recording cameras with E">
+                <span class="material-icons">bookmark</span>
+                <span class="tag-label">Tag E</span>
+            </button>
+            <button class="tag-button" id="tagButtonF" data-tag-label="F" title="Tag all recording cameras with F">
+                <span class="material-icons">bookmark</span>
+                <span class="tag-label">Tag F</span>
+            </button>
+            <button class="tag-button" id="tagButtonG" data-tag-label="G" title="Tag all recording cameras with G">
+                <span class="material-icons">bookmark</span>
+                <span class="tag-label">Tag G</span>
+            </button>
+            <button class="tag-button" id="tagButtonH" data-tag-label="H" title="Tag all recording cameras with H">
+                <span class="material-icons">bookmark</span>
+                <span class="tag-label">Tag H</span>
+            </button>
+            <button class="tag-button" id="tagButtonI" data-tag-label="I" title="Tag all recording cameras with I">
+                <span class="material-icons">bookmark</span>
+                <span class="tag-label">Tag I</span>
+            </button>
+            <button class="tag-button" id="tagButtonJ" data-tag-label="J" title="Tag all recording cameras with J">
+                <span class="material-icons">bookmark</span>
+                <span class="tag-label">Tag J</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Camera Dialog -->
+    <div class="dialog-overlay" id="addCameraDialog">
+        <div class="dialog">
+            <div class="dialog-header">
+                <h2>Add Camera</h2>
+                <button class="icon-button" id="closeAddDialog">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="dialog-content">
+                <div class="form-group">
+                    <label for="cameraName">Camera Name</label>
+                    <input type="text" id="cameraName" placeholder="e.g., Front Door Camera" required>
+                </div>
+                <div class="form-group">
+                    <label for="cameraUrl">Stream URL</label>
+                    <input type="url" id="cameraUrl" placeholder="http://192.168.1.100:8080/video" required>
+                    <small class="form-hint">Supported formats: MJPEG, MP4, HLS (HTTP/HTTPS)</small>
+                </div>
+            </div>
+            <div class="dialog-actions">
+                <button class="btn btn-secondary" id="cancelAddCamera">Cancel</button>
+                <button class="btn btn-primary" id="confirmAddCamera">Add Camera</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Settings Dialog -->
+    <div class="dialog-overlay" id="cameraSettingsDialog">
+        <div class="dialog">
+            <div class="dialog-header">
+                <h2>Camera Settings</h2>
+                <button class="icon-button" id="closeCameraSettingsDialog">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="dialog-content">
+                <div class="form-group">
+                    <label for="editCameraName">Camera Name</label>
+                    <input type="text" id="editCameraName" placeholder="e.g., Front Door Camera" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCameraUrl">Stream URL</label>
+                    <input type="url" id="editCameraUrl" placeholder="http://192.168.1.100:8080/video" required>
+                    <small class="form-hint">Supported formats: MJPEG, MP4, HLS (HTTP/HTTPS)</small>
+                </div>
+                <div class="form-group">
+                    <label>Rotation</label>
+                    <div class="rotation-controls">
+                        <button class="btn btn-secondary" id="rotateLeft">
+                            <span class="material-icons">rotate_left</span>
+                            Rotate Left
+                        </button>
+                        <button class="btn btn-secondary" id="rotateRight">
+                            <span class="material-icons">rotate_right</span>
+                            Rotate Right
+                        </button>
+                        <button class="btn btn-secondary" id="mirrorButton">
+                            <span class="material-icons">flip</span>
+                            Mirror
+                        </button>
+                    </div>
+                    <small class="form-hint" id="currentRotation">Current rotation: 0°</small>
+                </div>
+            </div>
+            <div class="dialog-actions">
+                <button class="btn btn-secondary" id="cancelCameraSettings">Cancel</button>
+                <button class="btn btn-primary" id="saveCameraSettings">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Dialog -->
+    <div class="dialog-overlay" id="settingsDialog">
+        <div class="dialog dialog-medium">
+            <div class="dialog-header">
+                <h2>Settings</h2>
+                <div class="header-actions">
+                    <button class="icon-button" id="backupSettings" title="Backup Settings">
+                        <span class="material-icons">download</span>
+                        <span>Backup</span>
+                    </button>
+                    <button class="icon-button" id="restoreSettings" title="Restore Settings">
+                        <span class="material-icons">upload</span>
+                        <span>Restore</span>
+                    </button>
+                </div>
+            </div>
+            <div class="settings-tabs">
+                <button class="settings-tab active" id="generalSettingsTab">General</button>
+                <button class="settings-tab" id="hotkeySettingsTab">Hotkeys</button>
+            </div>
+
+            <!-- Tag Selection and Detect Buttons (anchored below tabs) -->
+            <div class="hotkey-controls-bar hidden" id="hotkeyControlsBar">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label style="font-size: 14px; margin-bottom: 8px; display: block;">Add Hotkey:</label>
+                    <div id="tagSelector" class="tag-selector">
+                        <!-- Tag badges will be populated dynamically -->
+                    </div>
+                </div>
+                <div class="hotkey-add-controls" style="display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" id="detectHotkey" style="flex: 1;">
+                        <span class="material-icons" style="font-size: 16px;">keyboard</span>
+                        Detect Hotkey
+                    </button>
+                    <button class="btn btn-secondary" id="detectGesture" style="flex: 1;">
+                        <span class="material-icons" style="font-size: 16px;">gesture</span>
+                        Detect Gesture
+                    </button>
+                </div>
+            </div>
+
+            <div class="dialog-content">
+                <!-- General Settings Tab -->
+                <div class="settings-tab-content" id="generalSettingsContent">
+                    <div class="form-group">
+                        <label for="preTagDuration">Time Before Tag (seconds)</label>
+                        <div class="number-input-controls">
+                            <button class="btn btn-secondary btn-icon" id="preTagDecrease" type="button">
+                                <span class="material-icons">remove</span>
+                            </button>
+                            <input type="number" id="preTagDuration" min="0" max="120" value="10" required>
+                            <button class="btn btn-secondary btn-icon" id="preTagIncrease" type="button">
+                                <span class="material-icons">add</span>
+                            </button>
+                        </div>
+                        <small class="form-hint">How many seconds of video before the tag moment</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="postTagDuration">Time After Tag (seconds)</label>
+                        <div class="number-input-controls">
+                            <button class="btn btn-secondary btn-icon" id="postTagDecrease" type="button">
+                                <span class="material-icons">remove</span>
+                            </button>
+                            <input type="number" id="postTagDuration" min="0" max="120" value="2" required>
+                            <button class="btn btn-secondary btn-icon" id="postTagIncrease" type="button">
+                                <span class="material-icons">add</span>
+                            </button>
+                        </div>
+                        <small class="form-hint">How many seconds of video after the tag moment</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="tagLabelCount">Number of Tag Buttons</label>
+                        <div class="number-input-controls">
+                            <button class="btn btn-secondary btn-icon" id="tagLabelDecrease" type="button">
+                                <span class="material-icons">remove</span>
+                            </button>
+                            <input type="number" id="tagLabelCount" min="1" max="10" value="4" required>
+                            <button class="btn btn-secondary btn-icon" id="tagLabelIncrease" type="button">
+                                <span class="material-icons">add</span>
+                            </button>
+                        </div>
+                        <small class="form-hint">How many tag buttons to display (1-10)</small>
+                    </div>
+                </div>
+
+                <!-- Hotkeys Settings Tab -->
+                <div class="settings-tab-content hidden" id="hotkeySettingsContent">
+                    <div class="form-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label style="margin: 0;">Tag Button Hotkeys</label>
+                            <button class="btn btn-secondary" id="resetHotkeys" style="padding: 4px 8px; font-size: 12px;">
+                                <span class="material-icons" style="font-size: 16px; margin-right: 2px;">refresh</span>
+                                Reset
+                            </button>
+                        </div>
+                        <small class="form-hint">Configure keyboard shortcuts and mouse gestures for each tag button</small>
+
+                        <!-- Tag Hotkeys List -->
+                        <div class="tag-hotkeys-list" id="tagHotkeysList">
+                            <!-- Tag hotkey items will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dialog-actions">
+                <button class="btn btn-secondary" id="cancelSettings">Cancel</button>
+                <button class="btn btn-primary" id="saveSettings">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tag Change Menu — kept at body level so position:fixed works correctly in all browsers -->
+    <div class="tag-change-menu hidden" id="tagChangeMenu">
+        <div class="tag-change-content">
+            <div class="tag-change-title">Change tag:</div>
+            <div class="tag-change-badges" id="tagChangeBadges">
+                <!-- Tag badges will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for restore -->
+    <input type="file" id="restoreFileInput" accept=".json" style="display: none;">
+
+    <!-- Hotkey and Gesture Detectors -->
+    <div class="hotkey-detector hidden" id="hotkeyDetector">
+        <div class="detector-content">
+            <span class="material-icons">keyboard</span>
+            <p id="hotkeyDetectorMessage">Press any key combination...</p>
+            <div id="hotkeyDebugInfo" style="margin: 10px 0; padding: 8px; background: rgba(0,0,0,0.2); border-radius: 4px; font-family: monospace; font-size: 12px; display: none;"></div>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-small" id="cancelDetectHotkey">Cancel</button>
+                <button class="btn btn-primary btn-small hidden" id="confirmDetectHotkey">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="gesture-detector hidden" id="gestureDetector">
+        <div class="detector-overlay">
+            <div class="detector-content">
+                <span class="material-icons">gesture</span>
+                <p>Perform a mouse gesture on the screen...</p>
+                <small>Swipe, click multiple times, or long press</small>
+                <button class="btn btn-secondary btn-small" id="cancelDetectGesture">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Player Dialog -->
+    <div class="dialog-overlay" id="videoPlayerDialog">
+        <div class="dialog dialog-large">
+            <div class="dialog-header">
+                <h2 id="videoPlayerTitle">Video Playback</h2>
+                <button class="icon-button" id="closeVideoPlayer">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="dialog-content video-player-content">
+                <video id="videoPlayer" controls autoplay style="width: 100%; max-height: 70vh; background: #000;">
+                    Your browser does not support video playback.
+                </video>
+                <div class="video-player-info" id="videoPlayerInfo"></div>
+            </div>
+            <div class="dialog-actions">
+                <button class="btn btn-secondary" id="downloadVideo">
+                    <span class="material-icons">download</span>
+                    Download
+                </button>
+                <button class="btn btn-secondary" id="deleteVideoPlayer">
+                    <span class="material-icons">delete</span>
+                    Delete
+                </button>
+                <button class="btn btn-primary" id="closeVideoPlayerBtn">Close</button>
+            </div>
+            <div class="download-progress hidden" id="downloadProgress">
+                <button class="icon-button download-abort-btn" id="abortDownload" title="Cancel Download">
+                    <span class="material-icons">close</span>
+                </button>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="progress-text" id="progressText">Preparing download...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-message" id="toastMessage"></span>
+    </div>
+
+    <!-- Delete Date Confirmation Dialog -->
+    <div class="dialog-overlay" id="deleteDateDialog">
+        <div class="dialog dialog-small">
+            <div class="dialog-header">
+                <h2>Delete Videos</h2>
+                <button class="icon-button" id="closeDeleteDateDialog">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="dialog-content">
+                <p id="deleteDateMessage" style="margin-bottom: 20px; color: var(--on-surface);">
+                    Are you sure you want to delete all videos from <strong id="deleteDateText"></strong>?
+                </p>
+                <p style="font-size: 14px; color: var(--on-surface-variant);">
+                    This action cannot be undone.
+                </p>
+            </div>
+            <div class="dialog-actions">
+                <button class="btn btn-secondary" id="cancelDeleteDate">Cancel</button>
+                <button class="btn btn-error" id="confirmDeleteDate">Delete All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hotkey Conflict Dialog -->
+    <div class="dialog-overlay" id="hotkeyConflictDialog">
+        <div class="dialog dialog-small">
+            <div class="dialog-header">
+                <h2>Hotkey Conflict</h2>
+                <button class="icon-button" id="closeHotkeyConflictDialog">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="dialog-content">
+                <p id="hotkeyConflictMessage" style="margin-bottom: 20px; color: var(--on-surface);">
+                    <!-- Conflict message will be inserted here -->
+                </p>
+            </div>
+            <div class="dialog-actions">
+                <button class="btn btn-secondary" id="cancelHotkeyConflict">Cancel</button>
+                <button class="btn btn-primary" id="confirmHotkeyConflict">Reassign</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lock Screen Overlay -->
+    <div class="lock-screen-overlay" id="lockScreenOverlay">
+        <div class="lock-screen-content">
+            <span class="material-icons" style="font-size: 96px; margin-bottom: 20px;">lock</span>
+            <h1 style="font-size: 48px; margin: 0 0 10px 0; font-weight: 300;">LOCKED</h1>
+            <p style="font-size: 18px; margin: 0 0 30px 0;">
+                Mouse gestures are active and will trigger assigned hotkeys
+            </p>
+            <button class="btn btn-primary btn-large" id="unlockBtn">
+                <span class="material-icons">lock_open</span>
+                Unlock
+            </button>
+            <div id="lockScreenGestureInfo" style="margin-top: 30px; font-size: 14px;">
+                <!-- Gesture detection info will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/local-storage-repository.js"></script>
+    <script src="js/cache-manager.js"></script>
+    <script src="js/camera-manager.js"></script>
+    <script src="js/tag-manager.js"></script>
+    <script src="js/fullvideo-manager.js"></script>
+    <script src="js/video-recorder.js"></script>
+    <script src="js/toast-controller.js"></script>
+    <script src="js/settings-controller.js"></script>
+    <script src="js/tag-ui.js"></script>
+    <script src="js/fullvideo-ui.js"></script>
+    <script src="js/camera-controller.js"></script>
+    <script src="js/hotkey-controller.js"></script>
+    <script src="js/recording-controller.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
