@@ -108,7 +108,7 @@ test.describe('Toast Notifications', () => {
     await expect(toast).not.toHaveClass(/show/);
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should show toast for gestures on locked screen', async ({ page }) => {
@@ -137,7 +137,7 @@ test.describe('Toast Notifications', () => {
     await expect(toast).not.toHaveClass(/show/);
 
     // Unlock the screen for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should detect double tap within 300ms', async ({ page }) => {
@@ -175,7 +175,7 @@ test.describe('Toast Notifications', () => {
     await page.waitForTimeout(700);
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should NOT detect double tap if taps are more than 300ms apart', async ({ page }) => {
@@ -216,7 +216,7 @@ test.describe('Toast Notifications', () => {
     }
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should detect 2 consecutive swipes left correctly', async ({ page }) => {
@@ -257,7 +257,7 @@ test.describe('Toast Notifications', () => {
     expect(text).not.toContain('Tap');
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should detect consecutive swipes in different directions', async ({ page }) => {
@@ -320,7 +320,7 @@ test.describe('Toast Notifications', () => {
     await expect(toastMessage).toContainText('Swipe Left');
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should detect single swipe down', async ({ page }) => {
@@ -341,7 +341,7 @@ test.describe('Toast Notifications', () => {
     await expect(toastMessage).toContainText('Swipe Down');
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should detect 3 consecutive swipes right', async ({ page }) => {
@@ -368,7 +368,7 @@ test.describe('Toast Notifications', () => {
     }
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should detect swipe right, up, down sequence', async ({ page }) => {
@@ -409,7 +409,7 @@ test.describe('Toast Notifications', () => {
     await expect(toastMessage).toContainText('Swipe Down');
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should detect swipe right, up, up sequence', async ({ page }) => {
@@ -450,7 +450,7 @@ test.describe('Toast Notifications', () => {
     await expect(toastMessage).toContainText('Swipe Up');
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should NOT detect gestures when screen is unlocked', async ({ page }) => {
@@ -494,7 +494,7 @@ test.describe('Toast Notifications', () => {
     await expect(toast).not.toHaveClass(/show/);
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 
   test('should NOT show double tap after single tap with delay', async ({ page }) => {
@@ -530,6 +530,6 @@ test.describe('Toast Notifications', () => {
     expect(isVisible2).toBe(false);
 
     // Unlock for cleanup
-    await page.locator('#unlockBtn').click();
+    await page.locator('#unlockBtn').evaluate(el => el.click());
   });
 });
