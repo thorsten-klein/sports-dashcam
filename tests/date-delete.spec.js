@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('./test-config');
 
 test.describe('Date Delete Functionality', () => {
   test.beforeEach(async ({ page }) => {

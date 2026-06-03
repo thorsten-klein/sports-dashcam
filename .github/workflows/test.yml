@@ -45,7 +45,8 @@ jobs:
         with:
           name: coverage-shard-${{ matrix.browser }}
           path: .nyc_output/
-          if-no-files-found: error          # fail the job — coverage data MUST be produced
+          # Chromium MUST produce coverage data; firefox/webkit don't (page.coverage is Chromium-only)
+          if-no-files-found: ${{ matrix.browser == 'chromium' && 'error' || 'ignore' }}
           retention-days: 1
           include-hidden-files: true        # .nyc_output is a dot-dir; v4 excludes it by default
 

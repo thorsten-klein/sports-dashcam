@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('./test-config');
 
 test.describe('Hotkey Tag Change', () => {
   test.beforeEach(async ({ page }) => {

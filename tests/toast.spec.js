@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('./test-config');
 
 test.describe('Toast Notifications', () => {
   test.beforeEach(async ({ page }) => {

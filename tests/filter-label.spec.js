@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('./test-config');
 
 test.describe('Filter Label', () => {
   test.beforeEach(async ({ page }) => {
