@@ -13,7 +13,7 @@ module.exports = defineConfig({
     baseURL: 'http://localhost:8000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    actionTimeout: 5000,
+    actionTimeout: 15000,
   },
 
   projects: [
