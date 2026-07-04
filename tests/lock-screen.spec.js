@@ -47,3 +47,29 @@ test.describe('Lock Screen Functionality', () => {
     expect(parseInt(zIndexOverlay)).toBeGreaterThan(parseInt(zIndexHeader) || 0);
   });
 });
+
+test.describe('Lock Screen Functionality - touch input', () => {
+  // Real touch hardware requires hasTouch so Playwright dispatches genuine
+  // touchstart/touchend (and lets Chromium synthesize the follow-up click),
+  // instead of a plain mouse click that would never exercise the bug.
+  test.use({ hasTouch: true });
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('should unlock screen via touch tap on unlock button', async ({ page }) => {
+    await page.locator('#lockScreenBtn').tap();
+
+    const overlay = page.locator('#lockScreenOverlay.active');
+    await expect(overlay).toBeVisible();
+
+    // On a phone, touchstart's preventDefault() used to be called
+    // unconditionally while locked, which suppresses the browser's
+    // synthetic click after touchend - so a real finger tap could never
+    // unlock. Tapping (not clicking) here reproduces that scenario.
+    await page.locator('#unlockBtn').tap();
+
+    await expect(overlay).not.toBeVisible();
+  });
+});

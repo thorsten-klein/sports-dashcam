@@ -131,18 +131,24 @@ test.describe('Backup and Restore Settings', () => {
     // Click restore button
     await page.locator('#restoreSettings').click();
 
-    // Select the backup file
-    const fileChooser = await fileChooserPromise;
-    await fileChooser.setFiles(tempPath);
-
     // Handle confirmation dialog
     page.once('dialog', async dialog => {
       expect(dialog.message()).toContain('overwrite all settings');
       await dialog.accept();
     });
 
+    // Register the reload wait before triggering the restore, since the app
+    // reloads asynchronously (after a delay) once the dialog is accepted.
+    // waitForLoadState('load') would resolve immediately against the
+    // already-loaded pre-reload page instead of waiting for the real reload.
+    const loadPromise = page.waitForEvent('load');
+
+    // Select the backup file
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(tempPath);
+
     // Wait for page reload
-    await page.waitForLoadState('load');
+    await loadPromise;
     await page.waitForFunction(() => window.sportsDashcamApp && window.sportsDashcamApp.ready);
 
     // Verify camera was restored

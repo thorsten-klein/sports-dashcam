@@ -889,8 +889,10 @@ class HotkeyController {
             touchstart: (e) => {
                 if (!this.app.isLocked) return; // Only work when locked
                 if (e.touches.length > 0) {
-                    // Prevent text selection and scrolling during gestures
-                    e.preventDefault();
+                    // Prevent text selection and scrolling during gestures, unless it's the unlock button
+                    if (!e.target.closest('#unlockBtn')) {
+                        e.preventDefault();
+                    }
                     handleGestureStart(e.touches[0].clientX, e.touches[0].clientY, e.target);
                 }
             },
