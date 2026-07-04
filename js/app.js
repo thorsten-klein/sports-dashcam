@@ -1042,6 +1042,12 @@ Thumbnail Regeneration Complete:
         // Play/Pause button
         playPauseBtn.addEventListener('click', togglePlayPause);
 
+        // Clicking the video image itself also toggles play/pause
+        imgElement.addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePlayPause();
+        });
+
         // Go to first frame
         document.getElementById('mjpegFirst').addEventListener('click', () => {
             if (playing) togglePlayPause();
