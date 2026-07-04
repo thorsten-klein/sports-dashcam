@@ -292,10 +292,19 @@ class MjpegRecorder extends BaseRecorder {
     }
 
     async _startRecording() {
+        let capturing = false;
         this.segmentTimer = setInterval(async () => {
+            // Skip this tick if the previous capture is still in flight. Under an
+            // unstable stream, individual captures can take longer than the interval,
+            // so without this guard multiple captures overlap and whichever encode
+            // finishes first wins the earliest timestamp - even if it started later.
+            // That reorders frames out of capture sequence (e.g. an earlier frame
+            // ends up stored after a later one, so playback jumps backward to it).
+            if (capturing) return;
+            capturing = true;
+            const timestamp = Date.now();
             try {
                 const frameData = await this._captureFrame();
-                const timestamp = Date.now();
                 if (frameData) {
                     await this.cacheManager.storeRecordingChunk(this.cameraId, frameData, timestamp, 'mjpeg-frame');
                 }
@@ -305,6 +314,8 @@ class MjpegRecorder extends BaseRecorder {
                 if (!error.message || !error.message.includes('Tainted canvases')) {
                     console.error('Error in MJPEG capture loop:', error);
                 }
+            } finally {
+                capturing = false;
             }
         }, this.captureInterval);
     }
