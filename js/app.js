@@ -226,6 +226,7 @@ class SportsDashcamApp {
         document.getElementById('closeVideoPlayer').addEventListener('click', () => this.closeVideoPlayer());
         document.getElementById('closeVideoPlayerBtn').addEventListener('click', () => this.closeVideoPlayer());
         document.getElementById('downloadVideo').addEventListener('click', () => this.downloadCurrentVideo());
+        document.getElementById('downloadMjpeg').addEventListener('click', () => this.downloadCurrentMjpeg());
         document.getElementById('abortDownload').addEventListener('click', () => this.abortDownload());
         document.getElementById('deleteVideoPlayer').addEventListener('click', () => this.deleteCurrentVideo());
         this.videoPlayerDialog.addEventListener('click', (e) => {
@@ -686,7 +687,10 @@ Thumbnail Regeneration Complete:
                 return;
             }
 
-            if (tag.isMjpeg && (clip.metadata.type === 'mjpeg-sequence' || clip.metadata.type === 'mjpeg-full-video')) {
+            const isMjpegClip = tag.isMjpeg && (clip.metadata.type === 'mjpeg-sequence' || clip.metadata.type === 'mjpeg-full-video');
+            document.getElementById('downloadMjpeg').classList.toggle('hidden', !isMjpegClip);
+
+            if (isMjpegClip) {
                 // Show MJPEG sequence player
                 this.renderMjpegPlayer(clip, tag, date, playerContent);
             } else {
@@ -1368,6 +1372,41 @@ Thumbnail Regeneration Complete:
         } finally {
             downloadBtn.disabled = false;
             this.downloadAbortController = null;
+        }
+    }
+
+    /**
+     * Download the raw MJPEG frames exactly as they are stored in the cache,
+     * concatenated into a single blob (no transcoding).
+     */
+    async downloadCurrentMjpeg() {
+        if (!this.currentVideoBlob) {
+            return;
+        }
+
+        const tag = this.currentVideoBlob;
+
+        try {
+            const clip = await this.cacheManager.getClip(tag.clipId);
+
+            if (!clip || !clip.data || clip.data.length === 0) {
+                alert('No frames available for download');
+                return;
+            }
+
+            const blob = new Blob(clip.data, { type: 'video/x-motion-jpeg' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${tag.filename}.mjpeg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error downloading MJPEG:', error);
+            alert('Failed to download MJPEG');
         }
     }
 
